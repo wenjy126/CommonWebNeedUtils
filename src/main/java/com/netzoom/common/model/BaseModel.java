@@ -21,10 +21,20 @@ public class BaseModel {
 	@FieldName(value = "状态码")
 	private Integer code;
 
+	@FieldName("业务返回数据")
+	private Object data;
+
 	public BaseModel(String result, Object message, Integer code) {
 		this.result = result;
 		this.message = message;
 		this.code = code;
+	}
+
+	public BaseModel(Object data,String result, Object message, Integer code) {
+		this.result = result;
+		this.message = message;
+		this.code = code;
+		this.data = data;
 	}
 
 	public Integer getCode() {
@@ -35,6 +45,13 @@ public class BaseModel {
 		this.code = code;
 	}
 
+	public Object getData() {
+		return data;
+	}
+
+	public void setData(Object data) {
+		this.data = data;
+	}
 
 	public BaseModel() {
 	}

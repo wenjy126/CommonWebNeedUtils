@@ -14,4 +14,8 @@ public class SuccessModel extends BaseModel {
 	public SuccessModel(Object message) {
 		super(Constant.SUCCESS, message, HttpStatus.OK.value());
 	}
+
+	public SuccessModel(Object message, Object data) {
+		super(data,Constant.SUCCESS, message, HttpStatus.OK.value());
+	}
 }

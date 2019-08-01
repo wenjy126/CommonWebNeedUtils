@@ -12,8 +12,6 @@ import com.netzoom.common.util.Constant;
  */
 public class FailModel extends BaseModel {
 
-	Logger logger = LoggerFactory.getLogger(FailModel.class);
-
 	public FailModel(Object message) {
 		super(Constant.FAIL, message, HttpStatus.INTERNAL_SERVER_ERROR.value());
 	}
