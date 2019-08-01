@@ -13,7 +13,7 @@
         <java.version>1.8</java.version>
         <junit.version>4.12</junit.version>
         <fastjson.version>1.2.54</fastjson.version>
-        <spring-version>3.2.0.RELEASE</spring-version>
+        <spring-version>5.0.0.RELEASE</spring-version>
         <org.slf4j-version>1.6.1</org.slf4j-version>
         <pageHelper.version>5.1.10</pageHelper.version>
 

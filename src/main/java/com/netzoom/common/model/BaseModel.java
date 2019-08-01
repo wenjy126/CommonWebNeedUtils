@@ -1,6 +1,8 @@
 package com.netzoom.common.model;
 
 
+import com.netzoom.common.annotation.FieldName;
+
 /**
  * 组件间消息传输载体
  *
@@ -9,17 +11,14 @@ package com.netzoom.common.model;
  */
 public class BaseModel {
 
-	/**
-	 * 操作结果-success/fail
-	 */
+
+	@FieldName(value = "结果",comment = "操作结果-success/fail")
 	private String result;
-	/**
-	 * 返回信息
-	 */
+
+	@FieldName(value = "返回信息",comment = "这里写备注")
 	private Object message;
-	/**
-	 * 状态码
-	 */
+
+	@FieldName(value = "状态码")
 	private Integer code;
 
 	public BaseModel(String result, Object message, Integer code) {

@@ -1,6 +1,7 @@
 package com.netzoom.common.util;
 
 import com.alibaba.fastjson.JSON;
+import com.netzoom.common.annotation.FieldName;
 import com.netzoom.common.model.BaseModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +25,7 @@ public class CommonUtil {
 		return UUID.randomUUID().toString().replaceAll("-", "");
 	}
 
-	private final static Logger logger = LoggerFactory.getLogger(CommonUtil.class);
+//	private final static Logger logger = LoggerFactory.getLogger(CommonUtil.class);
 
 	/**
 	 * 将符合格式的jsonString转化成BaseModel
@@ -42,7 +43,7 @@ public class CommonUtil {
 	 * @param object 传入的对象
 	 */
 	public static void makeInfoLog(Object object) {
-		logger.info("打印结果：" + JSON.toJSONString(object));
+		System.out.println("打印结果：" + JSON.toJSONString(object));
 	}
 
 	/**
@@ -51,7 +52,7 @@ public class CommonUtil {
 	 * @param params 需要校验的参数
 	 * @return BaseModel success/fail
 	 */
-	public static BaseModel validateParamsBlankAndNull(Object targetObject,String... params){
+	public static BaseModel validateParamsBlankAndNull(Object targetObject,String... params) throws NoSuchFieldException {
 		Class clazz = targetObject.getClass();
 		Integer errorNumber = 0;
 		StringBuilder stringBuilder = new StringBuilder();
@@ -66,16 +67,22 @@ public class CommonUtil {
 			}
 			String result = null;
 			try {
+				//取得getter执行结果
 				result = (String) method.invoke(targetObject);
 			} catch (IllegalAccessException e) {
-				logger.error(e.getMessage());
+				System.out.println(e.getMessage());
 				return new BaseModel(Constant.FAIL,"方法不可执行");
 			} catch (InvocationTargetException e) {
-				logger.error(e.getMessage());
+				System.out.println(e.getMessage());
 				return new BaseModel(Constant.FAIL,"传入对象异常");
 			}
 			if (result==null || "".equals(result)){
-				stringBuilder.append(param+"为空，");
+				FieldName fieldName = clazz.getDeclaredField(param).getAnnotation(FieldName.class);
+				if (fieldName!=null){
+					stringBuilder.append(fieldName.value()+"不能为空，");
+				}else {
+					stringBuilder.append(param+"不能为空，");
+				}
 				errorNumber++;
 			}
 		}
