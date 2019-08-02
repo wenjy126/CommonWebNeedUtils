@@ -25,7 +25,7 @@ public class CommonUtil {
 		return UUID.randomUUID().toString().replaceAll("-", "");
 	}
 
-//	private final static Logger logger = LoggerFactory.getLogger(CommonUtil.class);
+	private final static Logger logger = LoggerFactory.getLogger(CommonUtil.class);
 
 	/**
 	 * 将符合格式的jsonString转化成BaseModel
@@ -43,7 +43,7 @@ public class CommonUtil {
 	 * @param object 传入的对象
 	 */
 	public static void makeInfoLog(Object object) {
-		System.out.println("打印结果：" + JSON.toJSONString(object));
+		logger.info("打印结果：" + JSON.toJSONString(object));
 	}
 
 	/**
@@ -70,10 +70,10 @@ public class CommonUtil {
 				//取得getter执行结果
 				result = (String) method.invoke(targetObject);
 			} catch (IllegalAccessException e) {
-				System.out.println(e.getMessage());
+				logger.error(e.getMessage());
 				return new BaseModel(Constant.FAIL,"方法不可执行");
 			} catch (InvocationTargetException e) {
-				System.out.println(e.getMessage());
+				logger.error(e.getMessage());
 				return new BaseModel(Constant.FAIL,"传入对象异常");
 			}
 			if (result==null || "".equals(result)){

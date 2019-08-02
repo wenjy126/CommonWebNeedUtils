@@ -31,6 +31,7 @@ HELP.md
 /META-INF
 /.mvn
 .DS_Store
+/out/
 
 ### log ###
 
