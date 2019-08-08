@@ -65,10 +65,10 @@ public class CommonUtil {
 			} catch (NoSuchMethodException e) {
 				return new BaseModel(Constant.FAIL,"参数"+param+"不存在");
 			}
-			String result = null;
+			Object result = null;
 			try {
 				//取得getter执行结果
-				result = (String) method.invoke(targetObject);
+				result =  method.invoke(targetObject);
 			} catch (IllegalAccessException e) {
 				logger.error(e.getMessage());
 				return new BaseModel(Constant.FAIL,"方法不可执行");
