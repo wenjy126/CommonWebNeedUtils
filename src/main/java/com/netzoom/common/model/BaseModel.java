@@ -41,16 +41,18 @@ public class BaseModel {
 		return code;
 	}
 
-	public void setCode(Integer code) {
+	public BaseModel setCode(Integer code) {
 		this.code = code;
+		return this;
 	}
 
 	public Object getData() {
 		return data;
 	}
 
-	public void setData(Object data) {
+	public BaseModel setData(Object data) {
 		this.data = data;
+		return this;
 	}
 
 	public BaseModel() {
@@ -60,16 +62,18 @@ public class BaseModel {
 		return result;
 	}
 
-	public void setResult(String result) {
+	public BaseModel setResult(String result) {
 		this.result = result;
+		return this;
 	}
 
 	public Object getMessage() {
 		return message;
 	}
 
-	public void setMessage(Object message) {
+	public BaseModel setMessage(Object message) {
 		this.message = message;
+		return this;
 	}
 
 	public BaseModel(String result, Object message) {

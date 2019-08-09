@@ -19,6 +19,16 @@ public class Constant {
 	/**
 	 * 业务请求成功
 	 */
-	public static final Integer SUCCESS_CODE = 20000;
+	public static final Integer SUCCESS_CODE = 200000;
+
+	/**
+	 * 参数错误
+	 */
+	public static final Integer PARAMS_ERROR = 500001;
+
+	/**
+	 * 逻辑错误
+	 */
+	public static final Integer INTERNAL_ERROR = 400099;
 
 }
