@@ -63,7 +63,11 @@ public class CommonUtil {
 				//将param首字母大写
 				method = clazz.getMethod("get"+param.substring(0,1).toUpperCase()+param.substring(1));
 			} catch (NoSuchMethodException e) {
-				return new BaseModel(Constant.FAIL,"参数"+param+"不存在");
+				try {
+					method = clazz.getSuperclass().getMethod("get"+param.substring(0,1).toUpperCase()+param.substring(1));
+				} catch (NoSuchMethodException e1) {
+					return new BaseModel(Constant.FAIL,"参数"+param+"不存在");
+				}
 			}
 			Object result = null;
 			try {
@@ -77,7 +81,12 @@ public class CommonUtil {
 				return new BaseModel(Constant.FAIL,"传入对象异常");
 			}
 			if (result==null || "".equals(result)){
-				FieldName fieldName = clazz.getDeclaredField(param).getAnnotation(FieldName.class);
+				FieldName fieldName = null;
+				try {
+					fieldName = clazz.getDeclaredField(param).getAnnotation(FieldName.class);
+				}catch (NoSuchFieldException e){
+					fieldName = clazz.getSuperclass().getDeclaredField(param).getAnnotation(FieldName.class);
+				}
 				if (fieldName!=null){
 					stringBuilder.append(fieldName.value()+"不能为空，");
 				}else {

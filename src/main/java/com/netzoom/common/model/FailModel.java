@@ -12,8 +12,22 @@ import com.netzoom.common.util.Constant;
  */
 public class FailModel extends BaseModel {
 
+	/**
+	 * 错误模型构造器,使用500作为错误码
+	 * @param message 传出的参数
+	 */
+	@Deprecated
 	public FailModel(Object message) {
 		super(Constant.FAIL, message, HttpStatus.INTERNAL_SERVER_ERROR.value());
+	}
+
+	/**
+	 * 错误模型构造器
+	 * @param message 传出的参数
+	 * @param errorCode 传出的业务错误码
+	 */
+	public FailModel(Object message,Integer errorCode) {
+		super(Constant.FAIL, message, errorCode);
 	}
 
 }

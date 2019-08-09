@@ -16,4 +16,9 @@ public class Constant {
 	 * */
 	public static final String FAIL = "fail";
 
+	/**
+	 * 业务请求成功
+	 */
+	public static final Integer SUCCESS_CODE = 20000;
+
 }
