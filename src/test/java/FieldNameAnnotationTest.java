@@ -7,6 +7,7 @@ import com.netzoom.common.util.FieldNameHandler;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
+import java.util.*;
 
 /**
  * 字段名解析器单元测试
@@ -36,4 +37,47 @@ public class FieldNameAnnotationTest {
 			System.out.println(JSON.toJSONString(result));
 		}
 	}
+
+	@Test
+	public void tesss(){
+		Long baseUUID = Math.abs(UUID.randomUUID().getMostSignificantBits()) >> 2;
+		System.out.println(baseUUID);
+	}
+
+	@Test
+	public void test(){
+//		System.out.println("----->"+String.valueOf(Math.abs(UUID.randomUUID().getMostSignificantBits())).substring(10));
+//		19位
+//		Long baseUUID = Math.abs(UUID.randomUUID().getMostSignificantBits());
+//		System.out.println(baseUUID);
+//		//当前时间
+//		Long currentTime = System.currentTimeMillis();
+//		//算法时间
+//		String uuid_short = String.valueOf(Math.abs(baseUUID*currentTime)).substring(10);
+//		Set set = new HashSet();
+//		for (int i = 0;i<10000000;i++){
+//			Long baseUUID = Math.abs(UUID.randomUUID().getMostSignificantBits()) >> 2;
+//			//当前时间
+//			Long currentTime = System.currentTimeMillis();
+//
+//			//算法时间
+//			String uuid_short = String.valueOf(Math.abs(baseUUID*currentTime)+currentTime).substring(0);
+//			set.add(uuid_short);
+//		}
+//		System.out.println(set.size());
+	}
+
+	@Test
+	public void uuid8_test(){
+//		int total = 100000000;
+//		Set set = new HashSet();
+//		for (int i = 0;i<total;i++){
+//			set.add(String.valueOf(System.currentTimeMillis()).substring(5));
+//		}
+//		System.out.println("总数："+total);
+//		System.out.println("不重复数量："+set.size());
+//		System.out.println("重复数："+(total-set.size()));
+	}
+
+
 }

@@ -59,7 +59,16 @@ public class SuccessModel extends BaseModel {
 	 * @param code 成功代码
 	 * @return SuccessModel
 	 */
-	public static SuccessModel successModelWithCode(Object message,Object data,Integer code){
+	public static SuccessModel withCode(Object message,Object data,Integer code){
 		return new SuccessModel(message,data,code);
+	}
+
+	/**
+	 * 仅带消息成功模型
+	 * @param message 成功信息
+	 * @return SuccessModel
+	 */
+	public static SuccessModel withoutData(Object message){
+		return new SuccessModel(message,null,Constant.SUCCESS_CODE);
 	}
 }

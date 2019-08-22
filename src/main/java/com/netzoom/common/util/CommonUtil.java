@@ -3,6 +3,8 @@ package com.netzoom.common.util;
 import com.alibaba.fastjson.JSON;
 import com.netzoom.common.annotation.FieldName;
 import com.netzoom.common.model.BaseModel;
+import com.netzoom.common.model.FailModel;
+import com.netzoom.common.model.SuccessModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +23,7 @@ public class CommonUtil {
 	 * 构造不带“-”的UUID
 	 * @return String
 	 */
+	@Deprecated
 	public static String getUUID() {
 		return UUID.randomUUID().toString().replaceAll("-", "");
 	}
@@ -52,7 +55,7 @@ public class CommonUtil {
 	 * @param params 需要校验的参数
 	 * @return BaseModel success/fail
 	 */
-	public static BaseModel validateParamsBlankAndNull(Object targetObject,String... params) throws NoSuchFieldException {
+	public static BaseModel validateParamsBlankAndNull(Object targetObject,String... params){
 		Class clazz = targetObject.getClass();
 		Integer errorNumber = 0;
 		StringBuilder stringBuilder = new StringBuilder();
@@ -66,7 +69,7 @@ public class CommonUtil {
 				try {
 					method = clazz.getSuperclass().getMethod("get"+param.substring(0,1).toUpperCase()+param.substring(1));
 				} catch (NoSuchMethodException e1) {
-					return new BaseModel(Constant.FAIL,"参数"+param+"不存在");
+					return FailModel.paramsError("参数"+param+"不存在");
 				}
 			}
 			Object result = null;
@@ -75,17 +78,21 @@ public class CommonUtil {
 				result =  method.invoke(targetObject);
 			} catch (IllegalAccessException e) {
 				logger.error(e.getMessage());
-				return new BaseModel(Constant.FAIL,"方法不可执行");
+				return FailModel.internalError("方法不可执行");
 			} catch (InvocationTargetException e) {
 				logger.error(e.getMessage());
-				return new BaseModel(Constant.FAIL,"传入对象异常");
+				return FailModel.internalError("传入对象异常");
 			}
 			if (result==null || "".equals(result)){
 				FieldName fieldName = null;
 				try {
 					fieldName = clazz.getDeclaredField(param).getAnnotation(FieldName.class);
 				}catch (NoSuchFieldException e){
-					fieldName = clazz.getSuperclass().getDeclaredField(param).getAnnotation(FieldName.class);
+					try {
+						fieldName = clazz.getSuperclass().getDeclaredField(param).getAnnotation(FieldName.class);
+					} catch (NoSuchFieldException e1) {
+						return FailModel.paramsError("参数"+param+"不存在");
+					}
 				}
 				if (fieldName!=null){
 					stringBuilder.append(fieldName.value()+"不能为空，");
@@ -95,9 +102,7 @@ public class CommonUtil {
 				errorNumber++;
 			}
 		}
-		return errorNumber==0 ? new BaseModel(Constant.SUCCESS,"校验通过"):new BaseModel(Constant.FAIL,stringBuilder);
+		return errorNumber==0 ? SuccessModel.withoutData("校验通过") :FailModel.paramsError(stringBuilder.toString());
 	}
-
-
 
 }
