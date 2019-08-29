@@ -2,6 +2,7 @@ package com.netzoom.common.util;
 
 import com.alibaba.fastjson.JSON;
 import com.netzoom.common.annotation.FieldName;
+import com.netzoom.common.exception.ValidationException;
 import com.netzoom.common.model.BaseModel;
 import com.netzoom.common.model.FailModel;
 import com.netzoom.common.model.SuccessModel;
@@ -11,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 通用工具类
@@ -102,7 +105,23 @@ public class CommonUtil {
 				errorNumber++;
 			}
 		}
-		return errorNumber==0 ? SuccessModel.withoutData("校验通过") :FailModel.paramsError(stringBuilder.toString());
+		if (errorNumber==0){
+			return SuccessModel.withoutData("校验通过");
+		}else {
+			throw new ValidationException(stringBuilder.toString());
+		}
+
 	}
 
+	/**
+	 * 字符串通配方法,只能匹配/api/* 类型
+	 * @param patternString 通配符 如/api/*
+	 * @param content 需要匹配的内容 如/api/test
+	 * @return boolean
+	 */
+	public static boolean StringMatcher(String patternString,String content){
+		Pattern pattern = Pattern.compile(patternString);
+		Matcher matcher = pattern.matcher(content);
+		return matcher.lookingAt();
+	}
 }

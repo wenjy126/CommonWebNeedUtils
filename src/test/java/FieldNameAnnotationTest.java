@@ -69,14 +69,7 @@ public class FieldNameAnnotationTest {
 
 	@Test
 	public void uuid8_test(){
-//		int total = 100000000;
-//		Set set = new HashSet();
-//		for (int i = 0;i<total;i++){
-//			set.add(String.valueOf(System.currentTimeMillis()).substring(5));
-//		}
-//		System.out.println("总数："+total);
-//		System.out.println("不重复数量："+set.size());
-//		System.out.println("重复数："+(total-set.size()));
+		
 	}
 
 
