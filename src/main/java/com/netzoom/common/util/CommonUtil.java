@@ -59,69 +59,7 @@ public class CommonUtil {
 	 * @return BaseModel success/fail
 	 */
 	public static BaseModel validateParamsBlankAndNull(Object targetObject,String... params){
-		Class clazz = targetObject.getClass();
-		Integer errorNumber = 0;
-		StringBuilder stringBuilder = new StringBuilder();
-		for (String param:params){
-			param = param.trim();
-			Method method = null;
-			try {
-				//将param首字母大写
-				method = clazz.getMethod("get"+param.substring(0,1).toUpperCase()+param.substring(1));
-			} catch (NoSuchMethodException e) {
-				try {
-					method = clazz.getSuperclass().getMethod("get"+param.substring(0,1).toUpperCase()+param.substring(1));
-				} catch (NoSuchMethodException e1) {
-					return FailModel.paramsError("参数"+param+"不存在");
-				}
-			}
-			Object result = null;
-			try {
-				//取得getter执行结果
-				result =  method.invoke(targetObject);
-			} catch (IllegalAccessException e) {
-				logger.error(e.getMessage());
-				return FailModel.internalError("方法不可执行");
-			} catch (InvocationTargetException e) {
-				logger.error(e.getMessage());
-				return FailModel.internalError("传入对象异常");
-			}
-			if (result==null || "".equals(result)){
-				FieldName fieldName = null;
-				try {
-					fieldName = clazz.getDeclaredField(param).getAnnotation(FieldName.class);
-				}catch (NoSuchFieldException e){
-					try {
-						fieldName = clazz.getSuperclass().getDeclaredField(param).getAnnotation(FieldName.class);
-					} catch (NoSuchFieldException e1) {
-						return FailModel.paramsError("参数"+param+"不存在");
-					}
-				}
-				if (fieldName!=null){
-					stringBuilder.append(fieldName.value()+"不能为空，");
-				}else {
-					stringBuilder.append(param+"不能为空，");
-				}
-				errorNumber++;
-			}
-		}
-		if (errorNumber==0){
-			return SuccessModel.withoutData("校验通过");
-		}else {
-			throw new ValidationException(stringBuilder.toString());
-		}
-
+		return ValidationUtil.validateParamsBlankAndNull(targetObject,params);
 	}
 
-	/**
-	 * 字符串通配方法,只能匹配/api/* 类型
-	 * @param patternString 通配符 如/api/*
-	 * @param content 需要匹配的内容 如/api/test
-	 * @return boolean
-	 */
-	public static boolean StringMatcher(String patternString,String content){
-		Pattern pattern = Pattern.compile(patternString);
-		Matcher matcher = pattern.matcher(content);
-		return matcher.lookingAt();
-	}
 }
