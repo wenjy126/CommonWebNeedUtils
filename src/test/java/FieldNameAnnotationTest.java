@@ -4,7 +4,9 @@ import com.netzoom.common.model.BaseModel;
 import com.netzoom.common.model.SuccessModel;
 import com.netzoom.common.util.CommonUtil;
 import com.netzoom.common.util.FieldNameHandler;
+import com.netzoom.common.util.ValidationUtil;
 import org.junit.Test;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -70,6 +72,11 @@ public class FieldNameAnnotationTest {
 	@Test
 	public void uuid8_test(){
 		
+	}
+
+	@Test
+	public void password_test(){
+		System.out.println(ValidationUtil.checkPassword("123u7.-/*-='\'][';/.,+"));
 	}
 
 
