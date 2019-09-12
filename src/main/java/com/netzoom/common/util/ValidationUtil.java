@@ -20,6 +20,8 @@ import java.util.regex.Pattern;
  */
 public class ValidationUtil {
 
+
+
     private final static Logger logger = LoggerFactory.getLogger(CommonUtil.class);
 
     /**
@@ -154,9 +156,9 @@ public class ValidationUtil {
                     }
                 }
                 if (fieldName!=null){
-                    stringBuilder.append(fieldName.value()+"不能为空;");
+                    stringBuilder.append(fieldName.value()+"参数异常;");
                 }else {
-                    stringBuilder.append(param+"不能为空;");
+                    stringBuilder.append(param+"参数异常;");
                 }
                 errorNumber++;
             }
