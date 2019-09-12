@@ -6,7 +6,7 @@
 
     <groupId>com.netzoom</groupId>
     <artifactId>common</artifactId>
-    <version>1.10</version>
+    <version>1.12</version>
 
 
     <properties>

@@ -1,9 +1,11 @@
 import com.alibaba.fastjson.JSON;
 import com.netzoom.common.annotation.FieldName;
 import com.netzoom.common.model.BaseModel;
+import com.netzoom.common.model.PageParam;
 import com.netzoom.common.model.SuccessModel;
 import com.netzoom.common.util.CommonUtil;
 import com.netzoom.common.util.FieldNameHandler;
+import com.netzoom.common.util.PageHelperUtils;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
@@ -70,6 +72,17 @@ public class FieldNameAnnotationTest {
 	@Test
 	public void uuid8_test(){
 		
+	}
+
+	@Test
+	public void page_test(){
+		try{
+			PageParam pp = new PageParam();
+			pp.setOrderType("aa");
+			PageHelperUtils.startPage(pp,true,"xixi","aaa","bbb","ccc");
+		}catch ( Exception e ){
+			System.out.println(e.getMessage());
+		}
 	}
 
 
