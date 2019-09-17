@@ -74,7 +74,7 @@ public class ValidationUtil {
         if (resultTrue){
             return resultTrue;
         }else {
-            throw new ValidationException("手机号码不符合格式");
+            throw new ValidationException("手机号码参数异常");
         }
 
     }
@@ -90,7 +90,7 @@ public class ValidationUtil {
         if (resultTrue){
             return resultTrue;
         }else {
-            throw new ValidationException("电子邮箱不符合格式");
+            throw new ValidationException("电子邮箱参数异常");
         }
     }
 
@@ -106,7 +106,7 @@ public class ValidationUtil {
         if (resultTrue){
             return resultTrue;
         }else {
-            throw new ValidationException("不支持中文密码");
+            throw new ValidationException("密码参数异常");
         }
     }
 

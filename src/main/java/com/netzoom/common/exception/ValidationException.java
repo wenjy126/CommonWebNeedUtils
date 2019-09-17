@@ -6,7 +6,6 @@ package com.netzoom.common.exception;
  */
 public class ValidationException extends RuntimeException{
 
-
 	public ValidationException(String message) {
 		super(message);
 	}

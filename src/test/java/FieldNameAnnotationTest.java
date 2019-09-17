@@ -1,10 +1,12 @@
 import com.alibaba.fastjson.JSON;
 import com.netzoom.common.annotation.FieldName;
 import com.netzoom.common.model.BaseModel;
+import com.netzoom.common.model.PageParam;
 import com.netzoom.common.model.SuccessModel;
 import com.netzoom.common.util.CommonUtil;
 import com.netzoom.common.util.FieldNameHandler;
 import com.netzoom.common.util.ValidationUtil;
+import com.netzoom.common.util.PageHelperUtils;
 import org.junit.Test;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -77,6 +79,17 @@ public class FieldNameAnnotationTest {
 	@Test
 	public void password_test(){
 		System.out.println(ValidationUtil.checkPassword("123u7.-/*-='\'][';/.,+"));
+	}
+
+	@Test
+	public void page_test(){
+		try{
+			PageParam pp = new PageParam();
+			pp.setOrderType("aa");
+			PageHelperUtils.startPage(pp,true,"xixi","aaa","bbb","ccc");
+		}catch ( Exception e ){
+			System.out.println(e.getMessage());
+		}
 	}
 
 
