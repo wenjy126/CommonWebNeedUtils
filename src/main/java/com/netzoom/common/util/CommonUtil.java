@@ -1,19 +1,12 @@
 package com.netzoom.common.util;
 
 import com.alibaba.fastjson.JSON;
-import com.netzoom.common.annotation.FieldName;
-import com.netzoom.common.exception.ValidationException;
+import com.netzoom.common.interfaces.FieldMethod;
 import com.netzoom.common.model.BaseModel;
-import com.netzoom.common.model.FailModel;
-import com.netzoom.common.model.SuccessModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * 通用工具类
@@ -60,6 +53,16 @@ public class CommonUtil {
 	 */
 	public static BaseModel validateParamsBlankAndNull(Object targetObject,String... params){
 		return ValidationUtil.validateParamsBlankAndNull(targetObject,params);
+	}
+
+	/**
+	 * 对象空值校验器
+	 *
+	 * @param fieldMethods 传入方法引用
+	 * @return BaseModel success/fail
+	 */
+	public static BaseModel validateParamsBlankAndNull(FieldMethod... fieldMethods) {
+		return ValidationUtil.validateParamsBlankAndNull(fieldMethods);
 	}
 
 }
