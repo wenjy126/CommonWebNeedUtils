@@ -21,17 +21,21 @@ import java.util.regex.Pattern;
  */
 public class ValidationUtil {
 
+    /**
+     * 邮箱规则
+     */
+    public static final Pattern EMAIL_PATTERN = Pattern.compile("^([a-zA-Z0-9]*[-_]?[a-zA-Z0-9]+)*@([a-zA-Z0-9]*[-_]?[a-zA-Z0-9]+)+[\\.][A-Za-z]{2,3}([\\.][A-Za-z]{2})?$");
     private final static Logger logger = LoggerFactory.getLogger(CommonUtil.class);
-
     /**
      * 手机号规则
      */
     private static final Pattern MOBILE_PATTERN = Pattern.compile("^((861)|(1))\\d{10}$");
 
     /**
-     * 邮箱规则
+     * 密码规则
      */
-    public static final Pattern EMAIL_PATTERN = Pattern.compile("^([a-zA-Z0-9]*[-_]?[a-zA-Z0-9]+)*@([a-zA-Z0-9]*[-_]?[a-zA-Z0-9]+)+[\\.][A-Za-z]{2,3}([\\.][A-Za-z]{2})?$");
+    private static final Pattern PASSWORD_PATTERN = Pattern.compile("^[\\x01-\\x7f]*$");
+
 
     /**
      * 正则校验
@@ -53,7 +57,7 @@ public class ValidationUtil {
      * @param content       需要匹配的内容 如/api/test
      * @return boolean
      */
-    public static boolean StringMatcher(String patternString, String content) {
+    public static boolean stringMatcher(String patternString, String content) {
         Pattern pattern = Pattern.compile(patternString);
         Matcher matcher = pattern.matcher(content);
         return matcher.lookingAt();
@@ -67,7 +71,13 @@ public class ValidationUtil {
      */
     public static boolean checkMobileNo(String mobile) {
         Matcher matcher = MOBILE_PATTERN.matcher(mobile);
-        return matcher.matches();
+        boolean resultTrue = matcher.matches();
+        if (resultTrue) {
+            return resultTrue;
+        } else {
+            throw new ValidationException("手机号码不符合格式");
+        }
+
     }
 
     /**
@@ -78,9 +88,30 @@ public class ValidationUtil {
      */
     public static boolean checkEmail(String email) {
         Matcher matcher = EMAIL_PATTERN.matcher(email);
-        return matcher.matches();
+        boolean resultTrue = matcher.matches();
+        if (resultTrue) {
+            return resultTrue;
+        } else {
+            throw new ValidationException("电子邮箱不符合格式");
+        }
     }
 
+
+    /**
+     * 验证是否为密码格式,特殊字符也可以作为密码
+     *
+     * @param password 密码
+     * @return boolean
+     */
+    public static boolean checkPassword(String password) {
+        Matcher matcher = PASSWORD_PATTERN.matcher(password);
+        boolean resultTrue = matcher.matches();
+        if (resultTrue) {
+            return resultTrue;
+        } else {
+            throw new ValidationException("不支持中文密码");
+        }
+    }
 
     /**
      * 对象空值校验器
@@ -123,7 +154,7 @@ public class ValidationUtil {
                 FieldName fieldName;
                 try {
                     fieldName = clazz.getDeclaredField(param).getAnnotation(FieldName.class);
-                } catch (NoSuchFieldException e) {
+                }catch (NoSuchFieldException e){
                     try {
                         fieldName = clazz.getSuperclass().getDeclaredField(param).getAnnotation(FieldName.class);
                     } catch (NoSuchFieldException e1) {
@@ -182,7 +213,7 @@ public class ValidationUtil {
         }
         if (stringBuilder == null) {
             return SuccessModel.withoutData("校验通过");
-        } else {
+        }else {
             throw new ValidationException(stringBuilder.toString());
         }
     }
