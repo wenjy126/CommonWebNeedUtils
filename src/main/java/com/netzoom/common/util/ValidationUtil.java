@@ -172,7 +172,7 @@ public class ValidationUtil {
                     }
                 }
                 if (fieldName != null) {
-                    stringBuilder.append(fieldName.value()).append("不能为空，");
+                    stringBuilder.append(fieldName.value()).append("不能为空;");
                 } else {
                     stringBuilder.append(param).append("不能为空;");
                 }
@@ -226,7 +226,7 @@ public class ValidationUtil {
                 }
                 stringBuilder.append(fieldName != null ?
                         fieldName.value() :
-                        paramName).append("不能为空");
+                        paramName).append("不能为空;");
             }
         }
         if (stringBuilder == null) {
