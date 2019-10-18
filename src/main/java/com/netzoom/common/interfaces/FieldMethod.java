@@ -5,7 +5,7 @@ import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Method;
 
 /**
- * 函数式接口，只接收无参get方法
+ * 函数式接口，只接收无参get/is方法
  * 继承Serializable以获取lambda实现类的数据
  *
  * @param <T>

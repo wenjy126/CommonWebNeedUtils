@@ -22,6 +22,16 @@ import java.util.regex.Pattern;
 public class ValidationUtil {
 
     /**
+     * 变量get前缀
+     */
+    public static final String FIELD_PREFIX_GET = "get";
+
+    /**
+     * Boolean变量is前缀
+     */
+    public static final String FIELD_PREFIX_IS = "is";
+
+    /**
      * 邮箱规则
      */
     public static final Pattern EMAIL_PATTERN = Pattern.compile("^([a-zA-Z0-9]*[-_]?[a-zA-Z0-9]+)*@([a-zA-Z0-9]*[-_]?[a-zA-Z0-9]+)+[\\.][A-Za-z]{2,3}([\\.][A-Za-z]{2})?$");
@@ -128,10 +138,10 @@ public class ValidationUtil {
             Method method;
             try {
                 //将param首字母大写
-                method = clazz.getMethod("get" + param.substring(0, 1).toUpperCase() + param.substring(1));
+                method = clazz.getMethod(FIELD_PREFIX_GET + param.substring(0, 1).toUpperCase() + param.substring(1));
             } catch (NoSuchMethodException e) {
                 try {
-                    method = clazz.getSuperclass().getMethod("get" + param.substring(0, 1).toUpperCase() + param.substring(1));
+                    method = clazz.getSuperclass().getMethod(FIELD_PREFIX_GET + param.substring(0, 1).toUpperCase() + param.substring(1));
                 } catch (NoSuchMethodException e1) {
                     throw new ValidationException("参数" + param + "不存在");
                 }
@@ -154,7 +164,7 @@ public class ValidationUtil {
                 FieldName fieldName;
                 try {
                     fieldName = clazz.getDeclaredField(param).getAnnotation(FieldName.class);
-                }catch (NoSuchFieldException e){
+                } catch (NoSuchFieldException e) {
                     try {
                         fieldName = clazz.getSuperclass().getDeclaredField(param).getAnnotation(FieldName.class);
                     } catch (NoSuchFieldException e1) {
@@ -185,25 +195,33 @@ public class ValidationUtil {
         StringBuilder stringBuilder = null;
         for (FieldMethod fieldMethod : fieldMethods) {
             if (ObjectUtils.isEmpty(fieldMethod.getParam())) {
-                //只有get方法才执行
-                if (fieldMethod.getImplMethodName().indexOf("get") != 0) {
+                //只有get/is方法才执行
+                String methodName = fieldMethod.getImplMethodName();
+                String paramName;
+                if (methodName.startsWith(FIELD_PREFIX_GET)) {
+                    paramName = fieldMethod.getImplMethodName().substring(3).toLowerCase();
+                } else if (methodName.startsWith(FIELD_PREFIX_IS)) {
+                    paramName = fieldMethod.getImplMethodName().substring(2).toLowerCase();
+                } else {
+                    logger.error(methodName + "方法不可执行");
                     throw new ValidationException("方法不可执行");
                 }
                 if (stringBuilder == null) {
                     stringBuilder = new StringBuilder();
                 }
-                String paramName = fieldMethod.getImplMethodName().replaceFirst("get", "").toLowerCase();
                 String className = fieldMethod.getImplClass().replace("/", ".");
                 Class clazz;
                 try {
                     clazz = Class.forName(className);
                 } catch (ClassNotFoundException e) {
+                    logger.error(e.getMessage());
                     throw new ValidationException("对象" + className + "不存在");
                 }
                 FieldName fieldName;
                 try {
                     fieldName = clazz.getDeclaredField(paramName).getAnnotation(FieldName.class);
                 } catch (NoSuchFieldException e) {
+                    logger.error(e.getMessage());
                     throw new ValidationException("参数" + paramName + "不存在");
                 }
                 stringBuilder.append(fieldName != null ?
@@ -213,7 +231,7 @@ public class ValidationUtil {
         }
         if (stringBuilder == null) {
             return SuccessModel.withoutData("校验通过");
-        }else {
+        } else {
             throw new ValidationException(stringBuilder.toString());
         }
     }
