@@ -2,6 +2,8 @@ package com.netzoom.common.util;
 
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -23,6 +25,8 @@ public class MongoDAO {
 
     @Autowired
     private MongoTemplate mongoTemplate;
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * 添加数据
@@ -52,40 +56,46 @@ public class MongoDAO {
         Query query = new Query();
         Update update = new Update();
 
-        try {
-            Class conditionClazz = conditions.getClass();
-            Field[] conditionFields = conditionClazz.getDeclaredFields();
-            for (int i = 0; i < conditionFields.length; i++) {
-                Field field = conditionFields[i];
-                field.setAccessible(true);
+        Class conditionClazz = conditions.getClass();
+        Field[] conditionFields = conditionClazz.getDeclaredFields();
+        for (int i = 0; i < conditionFields.length; i++) {
+            Field field = conditionFields[i];
+            field.setAccessible(true);
 
-                String key = field.getName();
-                Object value = field.get(conditions);
-
-                if (null != value) {
-                    query.addCriteria(Criteria.where(key).is(value));
-                }
-
+            String key = field.getName();
+            Object value = null;
+            try {
+                value = field.get(conditions);
+            } catch (IllegalAccessException e) {
+                logger.error("非法字段：" + key, e);
             }
 
-            Class updateClazz = updateObject.getClass();
-            Field[] updateFields = updateClazz.getDeclaredFields();
-            for (int i = 0; i < updateFields.length; i++) {
-                Field field = updateFields[i];
-                field.setAccessible(true);
-
-                String key = field.getName();
-                Object value = field.get(updateObject);
-
-                if (null != value) {
-                    update.set(key, value);
-                }
-
+            if (null != value) {
+                query.addCriteria(Criteria.where(key).is(value));
             }
 
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
         }
+
+        Class updateClazz = updateObject.getClass();
+        Field[] updateFields = updateClazz.getDeclaredFields();
+        for (int i = 0; i < updateFields.length; i++) {
+            Field field = updateFields[i];
+            field.setAccessible(true);
+
+            String key = field.getName();
+            Object value = null;
+            try {
+                value = field.get(updateObject);
+            } catch (IllegalAccessException e) {
+                logger.error("非法字段：" + key, e);
+            }
+
+            if (null != value) {
+                update.set(key, value);
+            }
+
+        }
+
 
         UpdateResult updateResult = mongoTemplate.updateFirst(query, update, tableName);
         return updateResult.getModifiedCount();
@@ -103,40 +113,46 @@ public class MongoDAO {
         Query query = new Query();
         Update update = new Update();
 
-        try {
-            Class conditionClazz = conditions.getClass();
-            Field[] conditionFields = conditionClazz.getDeclaredFields();
-            for (int i = 0; i < conditionFields.length; i++) {
-                Field field = conditionFields[i];
-                field.setAccessible(true);
+        Class conditionClazz = conditions.getClass();
+        Field[] conditionFields = conditionClazz.getDeclaredFields();
+        for (int i = 0; i < conditionFields.length; i++) {
+            Field field = conditionFields[i];
+            field.setAccessible(true);
 
-                String key = field.getName();
-                Object value = field.get(conditions);
-
-                if (null != value) {
-                    query.addCriteria(Criteria.where(key).is(value));
-                }
-
+            String key = field.getName();
+            Object value = null;
+            try {
+                value = field.get(conditions);
+            } catch (IllegalAccessException e) {
+                logger.error("非法字段：" + key, e);
             }
 
-            Class updateClazz = updateObject.getClass();
-            Field[] updateFields = updateClazz.getDeclaredFields();
-            for (int i = 0; i < updateFields.length; i++) {
-                Field field = updateFields[i];
-                field.setAccessible(true);
-
-                String key = field.getName();
-                Object value = field.get(updateObject);
-
-                if (null != value) {
-                    update.set(key, value);
-                }
-
+            if (null != value) {
+                query.addCriteria(Criteria.where(key).is(value));
             }
 
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
         }
+
+        Class updateClazz = updateObject.getClass();
+        Field[] updateFields = updateClazz.getDeclaredFields();
+        for (int i = 0; i < updateFields.length; i++) {
+            Field field = updateFields[i];
+            field.setAccessible(true);
+
+            String key = field.getName();
+            Object value = null;
+            try {
+                value = field.get(updateObject);
+            } catch (IllegalAccessException e) {
+                logger.error("非法字段：" + key, e);
+            }
+
+            if (null != value) {
+                update.set(key, value);
+            }
+
+        }
+
 
         UpdateResult updateResult = mongoTemplate.updateMulti(query, update, tableName);
         return updateResult.getModifiedCount();
@@ -152,25 +168,26 @@ public class MongoDAO {
     public long delete(Object conditions, String tableName) {
         Query query = new Query();
 
-        try {
-            Class clazz = conditions.getClass();
-            Field[] fields = clazz.getDeclaredFields();
-            for (int i = 0; i < fields.length; i++) {
-                Field f = fields[i];
-                f.setAccessible(true);
+        Class clazz = conditions.getClass();
+        Field[] fields = clazz.getDeclaredFields();
+        for (int i = 0; i < fields.length; i++) {
+            Field f = fields[i];
+            f.setAccessible(true);
 
-                String key = f.getName();
-                Object value = f.get(conditions);
-
-                if (null != value) {
-                    query.addCriteria(Criteria.where(key).is(value));
-                }
-
+            String key = f.getName();
+            Object value = null;
+            try {
+                value = f.get(conditions);
+            } catch (IllegalAccessException e) {
+                logger.error("非法字段：" + key, e);
             }
 
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            if (null != value) {
+                query.addCriteria(Criteria.where(key).is(value));
+            }
+
         }
+
 
         DeleteResult deleteResult = mongoTemplate.remove(query, tableName);
         return deleteResult.getDeletedCount();
@@ -187,25 +204,26 @@ public class MongoDAO {
     public <T> T findOne(Object conditions, String tableName) {
         Query query = new Query();
 
-        try {
-            Class clazz = conditions.getClass();
-            Field[] fields = clazz.getDeclaredFields();
-            for (int i = 0; i < fields.length; i++) {
-                Field f = fields[i];
-                f.setAccessible(true);
+        Class clazz = conditions.getClass();
+        Field[] fields = clazz.getDeclaredFields();
+        for (int i = 0; i < fields.length; i++) {
+            Field f = fields[i];
+            f.setAccessible(true);
 
-                String key = f.getName();
-                Object value = f.get(conditions);
-
-                if (null != value) {
-                    query.addCriteria(Criteria.where(key).is(value));
-                }
-
+            String key = f.getName();
+            Object value = null;
+            try {
+                value = f.get(conditions);
+            } catch (IllegalAccessException e) {
+                logger.error("非法字段：" + key, e);
             }
 
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            if (null != value) {
+                query.addCriteria(Criteria.where(key).is(value));
+            }
+
         }
+
 
         return (T) mongoTemplate.findOne(query, conditions.getClass(), tableName);
     }
@@ -221,25 +239,26 @@ public class MongoDAO {
     public <T> List<T> findList(Object conditions, String tableName) {
         Query query = new Query();
 
-        try {
-            Class clazz = conditions.getClass();
-            Field[] fields = clazz.getDeclaredFields();
-            for (int i = 0; i < fields.length; i++) {
-                Field f = fields[i];
-                f.setAccessible(true);
+        Class clazz = conditions.getClass();
+        Field[] fields = clazz.getDeclaredFields();
+        for (int i = 0; i < fields.length; i++) {
+            Field f = fields[i];
+            f.setAccessible(true);
 
-                String key = f.getName();
-                Object value = f.get(conditions);
-
-                if (null != value) {
-                    query.addCriteria(Criteria.where(key).is(value));
-                }
-
+            String key = f.getName();
+            Object value = null;
+            try {
+                value = f.get(conditions);
+            } catch (IllegalAccessException e) {
+                logger.error("非法字段：" + key, e);
             }
 
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            if (null != value) {
+                query.addCriteria(Criteria.where(key).is(value));
+            }
+
         }
+
 
         return (List<T>) mongoTemplate.find(query, conditions.getClass(), tableName);
     }
