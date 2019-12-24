@@ -19,7 +19,7 @@ import java.util.List;
  * @date 2019/12/20 13:48
  */
 @Component
-public class MongoDao {
+public class MongoDAO {
 
     @Autowired
     private MongoTemplate mongoTemplate;
