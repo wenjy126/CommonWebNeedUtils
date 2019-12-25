@@ -32,7 +32,7 @@ import java.util.*;
  * @Date: 2018/12/11 13:56
  * Description: HTTPClient客户端工具类
  */
-public class MyHttpClientUtils {
+public class HttpClientUtil {
 
     // 编码格式。发送编码格式统一用UTF-8
     private static final String ENCODING = "UTF-8";
@@ -43,7 +43,7 @@ public class MyHttpClientUtils {
     // 请求获取数据的超时时间(即响应时间)，单位毫秒。
     private static final int SOCKET_TIMEOUT = 6000;
 
-    private static final Logger logger = LoggerFactory.getLogger(MyHttpClientUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(HttpClientUtil.class);
 
     /**
      * 发送get请求；不带请求头和请求参数
