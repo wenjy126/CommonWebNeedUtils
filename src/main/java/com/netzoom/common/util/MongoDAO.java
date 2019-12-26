@@ -159,6 +159,62 @@ public class MongoDAO {
     }
 
     /**
+     * 根据条件更新一条数据（没有则添加）
+     *
+     * @param conditions   条件
+     * @param updateObject 更新字段
+     * @param tableName    表名
+     * @return 更新条数
+     */
+    public long upsertOne(Object conditions, Object updateObject, String tableName) {
+        Query query = new Query();
+        Update update = new Update();
+
+        Class conditionClazz = conditions.getClass();
+        Field[] conditionFields = conditionClazz.getDeclaredFields();
+        for (int i = 0; i < conditionFields.length; i++) {
+            Field field = conditionFields[i];
+            field.setAccessible(true);
+
+            String key = field.getName();
+            Object value = null;
+            try {
+                value = field.get(conditions);
+            } catch (IllegalAccessException e) {
+                logger.error("非法字段：" + key, e);
+            }
+
+            if (null != value) {
+                query.addCriteria(Criteria.where(key).is(value));
+            }
+
+        }
+
+        Class updateClazz = updateObject.getClass();
+        Field[] updateFields = updateClazz.getDeclaredFields();
+        for (int i = 0; i < updateFields.length; i++) {
+            Field field = updateFields[i];
+            field.setAccessible(true);
+
+            String key = field.getName();
+            Object value = null;
+            try {
+                value = field.get(updateObject);
+            } catch (IllegalAccessException e) {
+                logger.error("非法字段：" + key, e);
+            }
+
+            if (null != value) {
+                update.set(key, value);
+            }
+
+        }
+
+        UpdateResult updateResult = mongoTemplate.upsert(query, update, tableName);
+        return updateResult.getModifiedCount();
+    }
+
+    /**
      * 删除数据
      *
      * @param conditions 条件

@@ -143,7 +143,7 @@ public class ValidationUtil {
                 try {
                     method = clazz.getSuperclass().getMethod(FIELD_PREFIX_GET + param.substring(0, 1).toUpperCase() + param.substring(1));
                 } catch (NoSuchMethodException e1) {
-                    throw new ValidationException("参数" + param + "不存在");
+                    throw new ValidationException("参数" + param + "异常");
                 }
             }
             Object result;
@@ -168,13 +168,13 @@ public class ValidationUtil {
                     try {
                         fieldName = clazz.getSuperclass().getDeclaredField(param).getAnnotation(FieldName.class);
                     } catch (NoSuchFieldException e1) {
-                        throw new ValidationException("参数" + param + "不存在");
+                        throw new ValidationException("参数" + param + "异常");
                     }
                 }
                 if (fieldName != null) {
-                    stringBuilder.append(fieldName.value()).append("不能为空;");
+                    stringBuilder.append(fieldName.value()).append("参数异常;");
                 } else {
-                    stringBuilder.append(param).append("不能为空;");
+                    stringBuilder.append(param).append("参数异常;");
                 }
             }
         }
@@ -222,7 +222,7 @@ public class ValidationUtil {
                     fieldName = clazz.getDeclaredField(paramName).getAnnotation(FieldName.class);
                 } catch (NoSuchFieldException e) {
                     logger.error(e.getMessage());
-                    throw new ValidationException("参数" + paramName + "不存在");
+                    throw new ValidationException("参数" + paramName + "异常");
                 }
                 stringBuilder.append(fieldName != null ?
                         fieldName.value() :
